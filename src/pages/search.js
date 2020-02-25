@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-export default class Mangas extends Component{
+export default class Search extends Component{
     render(){
         return(
             <View style= {styles.container}>
-                <Text style={styles.textTODO}>To Do</Text>
+                <Text style={styles.textTODO}>To Do Search</Text>
             </View>
         );
     }

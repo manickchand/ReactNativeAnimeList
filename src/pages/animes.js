@@ -23,7 +23,6 @@ export default class Animes extends Component{
 
     goToDetails = (anime) =>{
         //alert("Clicou no "+anime.title);
-
     }
 
     render(){
@@ -66,19 +65,19 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor:'#070f31',
-      paddingEnd: 8,
-      paddingStart: 8,
+      width: '100%'
     },
     itemAnime:{
         alignItems: "center",
         flexGrow: 1,
         flexBasis: 0,
         margin: 4,
-        alignItems:'flex-start'
+        alignItems:'flex-start',
+        width: '100%',
     },
     imgAnime:{ 
-        width: 125,
-        height: 180 ,
+        width: '100%',
+        height: 150 ,
         borderRadius: 10,
     },
     scoreView:{
