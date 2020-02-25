@@ -2,41 +2,78 @@ import React, {Component} from 'react';
 import { FlatList, StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import api from '../services/api';
 
-export default class Animes extends Component{
+ export default class Animes extends Component{
 
     state = {
         animes:[],
-        loading:true
+        loading:true,
+        page:0,
     };
 
     componentDidMount(){
-        this.getAnimes();
+        this.getAnimes(1);
     }
 
-    getAnimes = async () => {
-        const response = await api.get("/top/anime/");
+    getAnimes = async (page) => {
 
-        const data = response.data.top;
-        this.setState({animes:data, loading:false});   
+        this.setState({loading:true});
+
+        const response = await api.get('/top/anime/'+page);
+
+        const animes = response.data.top;
+        this.setState({
+            animes:[... this.state.animes, ... animes], 
+            loading:false,
+            page:page
+        });   
           
+    }
+
+    loadMore = () =>{
+        let page = this.state.page +1
+        this.getAnimes(page)
     }
 
     goToDetails = (anime) =>{
         //alert("Clicou no "+anime.title);
     }
-
+    
     render(){
+        console.disableYellowBox = true;
         return(
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
 
-                <ActivityIndicator style={{opacity: this.state.loading ? 1.0 : 0.0}} size="large" color="#ffffff" animating={true} />
+                <View style={styles.sliderTopAnimes}>
+                    <Image 
+                        style={styles.ivSliderTop} 
+                        source={{uri:'https://images7.alphacoders.com/611/thumb-350-611138.png'}}/>
+                    <View style={styles.vwOpacityTop}>
+                        <Text style={styles.tvTopNameAnime}>Dragon Ball Z</Text>
+                    </View>
+                </View>
+
+                <Text style={styles.tvTopAnimes}>Top Animes</Text>
+
+                {
+                    //loadinsg
+                    (this.state.loading) ? (
+                        <ActivityIndicator size="large" color="#ffffff" animating={true} />
+                    ) : (
+                        null
+                    )
+                }
+
                 <FlatList
                     data={this.state.animes}
                     keyExtractor={item => item.id}
                     numColumns={3}
+                    onEndReached={this.loadMore}
+                    onEndReachedThreshold={0.4}
                     renderItem={({ item }) => {
                         return (
-                            <TouchableOpacity style={styles.itemAnime} onPress={this.goToDetails(item)}>
+                            <TouchableOpacity 
+                                style={styles.itemAnime}
+                                onPress={()=>{}}>
                         
                                 <View style={styles.itemAnime}>
                                 
@@ -47,15 +84,13 @@ export default class Animes extends Component{
                                     <Image 
                                     style={styles.imgAnime} 
                                     source={{uri:item.image_url}}/>
-
-                                
                                 </View>
                             </TouchableOpacity>
 
                         );
                     }}
                 />
-            </ScrollView>
+            </View>
         );
     } 
 }
@@ -67,6 +102,33 @@ const styles = StyleSheet.create({
       backgroundColor:'#070f31',
       width: '100%'
     },
+    sliderTopAnimes:{
+        width: "100%",
+        height:240,
+    },
+    ivSliderTop:{
+        width:'100%',
+        height:240,
+        zIndex:1,
+    },
+    vwOpacityTop:{
+        width:'100%',
+        height:240,
+        backgroundColor: 'rgba(3, 58, 116, 0.7)',
+        position:"absolute",
+        zIndex:2,
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    tvTopNameAnime:{
+        color:"#ffffff",
+        fontSize:24,
+    },
+    tvTopAnimes:{
+        color:"#ffffff",
+        marginStart:16,
+        marginTop:16,
+    },
     itemAnime:{
         alignItems: "center",
         flexGrow: 1,
@@ -77,7 +139,7 @@ const styles = StyleSheet.create({
     },
     imgAnime:{ 
         width: '100%',
-        height: 150 ,
+        height: 180 ,
         borderRadius: 10,
     },
     scoreView:{

@@ -2,14 +2,17 @@ import React from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Animes from './pages/animes';
 import Seasons from './pages/seasons';
 import Search from './pages/search';
+import AnimeDetail from './pages/animeDetail';
 import './config/statusBarConfig'
 
 const BottomTab = createBottomTabNavigator();
+// const Stack = createStackNavigator();
 
 const TAB1 = "HOME";
 const TAB2 = "SEASONS";
@@ -37,13 +40,19 @@ export default function App() {
               activeTintColor: '#0E80FF',
               inactiveTintColor: 'white',
               style: {
-                backgroundColor: '#000000'
+                backgroundColor: '#000000',
+                padding:12,
               } 
             }}>
         <BottomTab.Screen name={TAB1} component={Animes} />
         <BottomTab.Screen name={TAB2} component={Seasons} />
         <BottomTab.Screen name={TAB3} component={Search} />
       </BottomTab.Navigator>
+      
+      {/* <Stack.Navigator>
+        <Stack.Screen name="AnimeDetail" component={AnimeDetail} />
+      </Stack.Navigator> */}
+    
     </NavigationContainer>
 
   );
